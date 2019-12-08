@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import BullteinBoard from '@/components/BullteinBoard'
+import BulletinBoard from '@/components/BulletinBoard'
 
 Vue.use(Router)
 
@@ -8,8 +8,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'BullteinBoard',
-      component: BullteinBoard
+      name: 'BulletinBoard',
+      component: BulletinBoard
     }
   ]
 })
