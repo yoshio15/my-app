@@ -14,10 +14,15 @@
             <v-btn @click="sendMsg">送信</v-btn>
           </v-col>
         </v-row>
-        <h2>Recent Post</h2>
-        <div v-for="msg in messages" :key="msg.name">
-          <div class="mt-2">{{ msg.fields.msg.stringValue }}</div>
-        </div>
+        <v-card outlined>
+          <v-card-title class="justify-center">Recent Post</v-card-title>
+          <v-card-text class="text--primary">
+            <div v-for="msg in messages" :key="msg.name">
+              <div class="mt-2">{{ msg.fields.msg.stringValue }}</div>
+              <v-divider></v-divider>
+            </div>
+          </v-card-text>
+        </v-card>
       </v-form>
     </v-container>
   </div>
@@ -60,18 +65,19 @@ export default {
         .post(url, data)
         .then(response => {
           console.log(response);
+          this.getMsgList();
         })
         .catch(error => {
           console.log(error);
         });
       this.msg = "";
       // TODO 投稿成功時に最新のリストを取得（Promise使うべきかも）
-      this.getMsgList();
+      // this.getMsgList();
     },
     sortMsgByPostedTimeDesc(receivedMsgs) {
-      return receivedMsgs.sort((a,b) => {
-        return (a.createTime < b.createTime ? 1 : -1);
-      })
+      return receivedMsgs.sort((a, b) => {
+        return a.createTime < b.createTime ? 1 : -1;
+      });
     }
   }
 };
