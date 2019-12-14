@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <v-app-bar color="teal" dark>
-      <v-toolbar-title>Yoshio App</v-toolbar-title>
-    </v-app-bar>
-    <h2 class="mt-4">Bulletin Board</h2>
+<!-- TODO 削除ボタンの実装 -->
+  <v-content>
     <v-container width="80%">
+      <h2 class="mt-4">Bulletin Board</h2>
       <v-form>
         <v-row>
           <v-col>
@@ -25,7 +23,7 @@
         </v-card>
       </v-form>
     </v-container>
-  </div>
+  </v-content>
 </template>
 <script>
 import axios from "axios";
