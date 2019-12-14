@@ -5,13 +5,14 @@
     <v-text-field placeholder="パスワード" outlined v-model="password"></v-text-field>
     <v-row>
       <v-btn @click="signIn">ログイン</v-btn>
+      <v-btn :to="{name: 'SignUp'}">新規登録</v-btn>
     </v-row>
   </div>
 </template>
 <script>
 import firebase from "firebase";
 export default {
-  name: 'SignIn',
+  name: "SignIn",
   data() {
     return {
       email: "",
@@ -25,7 +26,7 @@ export default {
         .signInWithEmailAndPassword(this.email, this.password)
         .then(response => {
           console.log(response);
-          this.$router.push({name: 'Top'})
+          this.$router.push({ name: "Top" });
         })
         .catch(function(error) {
           var errorCode = error.code;

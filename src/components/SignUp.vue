@@ -5,6 +5,7 @@
     <v-text-field placeholder="パスワード" outlined v-model="password"></v-text-field>
     <v-row>
       <v-btn @click="signUp">登録</v-btn>
+      <v-btn :to="{name: 'SignIn'}">ログイン画面へ戻る</v-btn>
     </v-row>
   </div>
 </template>
