@@ -1,32 +1,13 @@
 <template>
-  <!-- TODO:v-forで回す -->
   <v-navigation-drawer v-model="drawer" app>
     <v-list>
       <v-subheader>Menu</v-subheader>
       <v-list-item-group>
-        <v-list-item>
+        <v-list-item v-for="item in sideBarItems" :key="item.id">
           <v-list-item-content>
             <v-list-item-title>
               <nav>
-                <router-link :to="{name: 'Top'}">Top</router-link>
-              </nav>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>
-              <nav>
-                <router-link :to="{name: 'BulletinBoard'}">BulletinBoard</router-link>
-              </nav>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item>
-          <v-list-item-content>
-            <v-list-item-title>
-              <nav>
-                <router-link :to="{name: 'DirectMessage'}">DirectMessage</router-link>
+                <router-link :to="item.path">{{ item.title }}</router-link>
               </nav>
             </v-list-item-title>
           </v-list-item-content>
@@ -39,7 +20,12 @@
 export default {
   data() {
     return {
-      drawer: null
+      drawer: null,
+      sideBarItems: [
+        { id: 1, title: 'Top', path: { name: 'Top'} },
+        { id: 2, title: 'BulletinBoard', path: { name: 'BulletinBoard'} },
+        { id: 3, title: 'DirectMessage', path: { name: 'DirectMessage'} }
+      ]
     };
   },
   created() {
