@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Firebase from 'firebase'
-import Top from '@/components/Top'
-import SignIn from '@/components/SignIn'
-import SignUp from '@/components/SignUp'
-import BulletinBoard from '@/components/BulletinBoard'
-import DirectMessage from '@/components/DirectMessage'
+import Top from '@/components/pages/Top'
+import SignIn from '@/components/pages/SignIn'
+import SignUp from '@/components/pages/SignUp'
+import BulletinBoard from '@/components/pages/BulletinBoard'
+import DirectMessage from '@/components/pages/DirectMessage'
 
 Vue.use(Router)
 

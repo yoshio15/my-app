@@ -2,11 +2,14 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import vuetify from '@/plugins/vuetify'
+import eventHub from '@/plugins/EventHub'
 import * as firebase from "firebase/app";
 import "firebase/auth";
 
+Vue.use(eventHub)
 Vue.config.productionTip = false
 
+// TODO: FirebaseConfigファイルに切り出し
 const firebaseConfig = {
   apiKey: "AIzaSyD_-nledmYw0J35BOOdwdDYCraaYYPcnVs",
   authDomain: "yoshio-app.firebaseapp.com",

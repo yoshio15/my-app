@@ -1,18 +1,18 @@
 <template>
   <div>
-    <h2>ログイン</h2>
+    <h2>ユーザー登録</h2>
     <v-text-field placeholder="メールアドレス" outlined v-model="email"></v-text-field>
     <v-text-field placeholder="パスワード" outlined v-model="password"></v-text-field>
     <v-row>
-      <v-btn @click="signIn">ログイン</v-btn>
-      <v-btn :to="{name: 'SignUp'}">新規登録</v-btn>
+      <v-btn @click="signUp">登録</v-btn>
+      <v-btn :to="{name: 'SignIn'}">ログイン画面へ戻る</v-btn>
     </v-row>
   </div>
 </template>
 <script>
 import firebase from "firebase";
 export default {
-  name: "SignIn",
+  name: "SignUp",
   data() {
     return {
       email: "",
@@ -20,21 +20,21 @@ export default {
     };
   },
   methods: {
-    signIn: function() {
+    // TODO: Firebaseにアクセスする系共通化
+    signUp: function() {
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.email, this.password)
+        .createUserWithEmailAndPassword(this.email, this.password)
         .then(response => {
-          console.log(response);
-          this.$router.push({ name: "Top" });
+          console.log(response)
+          alert('SUCCESS!')
         })
-        .catch(function(error) {
+        .catch(error => {
           var errorCode = error.code;
           var errorMessage = error.message;
-          console.log(error);
-          console.log(errorCode);
-          console.log(errorMessage);
-          alert("FAILED!");
+          console.log(error)
+          console.log(errorCode)
+          console.log(errorMessage)
         });
     }
   }
