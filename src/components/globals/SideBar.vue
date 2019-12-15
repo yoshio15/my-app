@@ -7,6 +7,7 @@
           <v-list-item-content>
             <v-list-item-title>
               <nav>
+                <!-- TODO: サイドバーリンクではなくする -->
                 <router-link :to="item.path">{{ item.title }}</router-link>
               </nav>
             </v-list-item-title>

@@ -1,12 +1,12 @@
 <template>
-  <!-- TODO: ログイン状態によってボタン出しわけ -->
+  <!-- TODO: ログイン認証待ちのローディング -->
   <!-- ※divで囲わないとv-app-barの高さが固定されない -->
   <div>
     <v-app-bar color="teal" dark>
-      <v-app-bar-nav-icon @click="toggleSideBar"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="toggleSideBar"  v-if="isSignedIn"></v-app-bar-nav-icon>
       <v-toolbar-title>Yoshio App</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn text @click="signOut">ログアウト</v-btn>
+      <v-btn text @click="signOut" v-if="isSignedIn">ログアウト</v-btn>
     </v-app-bar>
   </div>
 </template>
@@ -25,12 +25,17 @@ export default {
         .signOut()
         .then(response => {
           console.log(response);
+          this.$store.dispatch('doSetUser', {})
+          this.$store.dispatch('doSetIsSignedIn', false);
           this.$router.push({ name: "SignIn" });
         })
         .catch(error => {
           console.log(error);
         });
     }
+  },
+  computed: {
+    isSignedIn: function() { return this.$store.getters.isSignedIn }
   }
 }
 </script>
