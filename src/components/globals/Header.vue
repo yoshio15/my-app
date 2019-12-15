@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO: ログイン認証待ちのローディング -->
   <!-- ※divで囲わないとv-app-barの高さが固定されない -->
   <div>
     <v-app-bar color="teal" dark>

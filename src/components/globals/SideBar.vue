@@ -4,14 +4,14 @@
       <v-subheader>Menu</v-subheader>
       <v-list-item-group>
         <v-list-item v-for="item in sideBarItems" :key="item.id">
-          <v-list-item-content>
-            <v-list-item-title>
-              <nav>
-                <!-- TODO: サイドバーリンクではなくする -->
-                <router-link :to="item.path">{{ item.title }}</router-link>
-              </nav>
-            </v-list-item-title>
-          </v-list-item-content>
+          <router-link :to="item.path">
+            <v-list-item-content>
+              <v-list-item-title v-text="item.title">
+                  <!-- TODO: サイドバーリンクではなくする -->
+                {{ item.title }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </router-link>
         </v-list-item>
       </v-list-item-group>
     </v-list>

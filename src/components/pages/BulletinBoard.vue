@@ -1,27 +1,43 @@
 <template>
-<!-- TODO 削除ボタンの実装 -->
+  <!-- TODO 削除ボタンの実装, 投稿レイアウトの修正 -->
   <v-content>
     <v-container width="80%">
-      <h2 class="mt-4">Bulletin Board</h2>
-      <v-form>
-        <v-row>
-          <v-col>
-            <v-text-field outlined v-model="msg"></v-text-field>
-          </v-col>
-          <v-col cols="2" class="mt-2">
-            <v-btn @click="sendMsg">送信</v-btn>
-          </v-col>
-        </v-row>
-        <v-card outlined>
-          <v-card-title class="justify-center">Recent Post</v-card-title>
-          <v-card-text class="text--primary">
-            <div v-for="msg in messages" :key="msg.name">
-              <div class="mt-2">{{ msg.fields.msg.stringValue }}</div>
-              <v-divider></v-divider>
-            </div>
-          </v-card-text>
-        </v-card>
-      </v-form>
+      <v-row>
+        <v-col>
+          <!-- TODO: ダイアログのコンポーネント化 -->
+          <v-dialog v-model="postDialog" max-width="600px" class="mx-auto">
+            <template v-slot:activator="{ on }">
+              <v-btn v-on="on" class="primary">+ 投稿を新規作成する</v-btn>
+            </template>
+            <v-card>
+              <v-card-title class="grey lighten-5 justify-center">投稿を新規作成する</v-card-title>
+              <v-divider class="mb-6"></v-divider>
+              <v-card-text class="mb-n6">
+                <v-text-field outlined v-model="postContent.title" placeholder="投稿のタイトル"></v-text-field>
+                <v-textarea outlined v-model="postContent.content" placeholder="投稿したい内容を入力して下さい"></v-textarea>
+              </v-card-text>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="postDialog=!postDialog">閉じる</v-btn>
+                <v-btn color="blue darken-1" text @click="postDialog=!postDialog; sendMsg()">投稿する</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <!-- ダイアログEND -->
+        </v-col>
+      </v-row>
+      <v-form></v-form>
+      <v-card v-for="msg in messages" :key="msg.name" class="mb-2" outlined>
+        <v-card-title>{{ msg.fields.title.stringValue}}</v-card-title>
+        <v-divider></v-divider>
+        <v-card-text class="text--primary">
+          <div>
+            <div class="mt-2">{{ msg.fields.content.stringValue }}</div>
+          </div>
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-text>投稿日時：{{ msg.createTime }}</v-card-text>
+      </v-card>
     </v-container>
   </v-content>
 </template>
@@ -31,7 +47,12 @@ export default {
   data() {
     return {
       msg: "",
-      messages: []
+      postContent: {
+        title: "",
+        content: ""
+      },
+      messages: [],
+      postDialog: false
     };
   },
   created() {
@@ -40,12 +61,12 @@ export default {
   methods: {
     getMsgList() {
       const url =
-        "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/messages";
+        "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/postContents";
       axios
         .get(url)
         .then(response => {
           this.messages = this.sortMsgByPostedTimeDesc(response.data.documents);
-          console.log(response);
+          console.log(this.messages);
         })
         .catch(error => {
           console.log(error);
@@ -53,10 +74,11 @@ export default {
     },
     sendMsg() {
       const url =
-        "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/messages";
+        "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/postContents";
       const data = {
         fields: {
-          msg: { stringValue: this.msg }
+          title: { stringValue: this.postContent.title },
+          content: { stringValue: this.postContent.content }
         }
       };
       axios
