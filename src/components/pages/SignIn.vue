@@ -1,13 +1,13 @@
 <template>
-  <div>
-    <v-card width="50%" class="ma-auto">
-      <v-card-title class="grey lighten-5 justify-center mt-12">Login</v-card-title>
+  <div class="mt-12">
+    <v-card width="50%" class="mx-auto" :loading="isLoading">
+      <v-card-title class="grey lighten-5 justify-center">Login</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mt-5">
         <v-text-field placeholder="メールアドレス" outlined v-model="email"></v-text-field>
       </v-card-text>
       <v-card-text class="my-n5">
-        <v-text-field placeholder="パスワード" outlined v-model="password"></v-text-field>
+        <v-text-field placeholder="パスワード" outlined v-model="password" type="password"></v-text-field>
       </v-card-text>
       <v-card-actions class="d-flex justify-space-between">
         <v-btn block large class="primary" @click="signIn">ログイン</v-btn>
@@ -21,18 +21,19 @@
 </template>
 <script>
 import firebase from "firebase";
-import { userInfo } from "os";
 export default {
   name: "SignIn",
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      isLoading: false
     };
   },
   methods: {
     // TODO: Firebaseにアクセスする系共通化
     signIn: function() {
+      this.isLoading = true
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
@@ -41,6 +42,7 @@ export default {
           this.$store.dispatch("doSetUser", user);
           this.$store.dispatch("doSetIsSignedIn", true);
           this.$router.push({ name: "Top" });
+          this.isLoading = false
         })
         .catch(function(error) {
           var errorCode = error.code;

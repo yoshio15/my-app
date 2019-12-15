@@ -44,6 +44,7 @@ export default {
           console.log(error);
           console.log(errorCode);
           console.log(errorMessage);
+          alert("REGISTRATION FAILED!");
         });
     }
   }
