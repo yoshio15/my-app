@@ -3,15 +3,12 @@
     <v-list>
       <v-subheader>Menu</v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="item in sideBarItems" :key="item.id">
-          <router-link :to="item.path">
+        <v-list-item v-for="item in sideBarItems" :key="item.id" :to="item.path">
             <v-list-item-content>
               <v-list-item-title v-text="item.title">
-                  <!-- TODO: サイドバーリンクではなくする -->
                 {{ item.title }}
               </v-list-item-title>
             </v-list-item-content>
-          </router-link>
         </v-list-item>
       </v-list-item-group>
     </v-list>

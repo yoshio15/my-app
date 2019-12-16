@@ -4,7 +4,9 @@
     <SideBar></SideBar>
     <v-content>
       <v-container>
-        <router-view />
+        <transition name="fade">
+          <router-view />
+        </transition>
       </v-container>
     </v-content>
   </v-app>
@@ -29,5 +31,11 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
   color: #2c3e50;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>
