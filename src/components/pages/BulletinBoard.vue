@@ -1,32 +1,14 @@
 <template>
-  <!-- TODO 削除ボタンの実装, 投稿レイアウトの修正 -->
+  <!-- TODO 削除ボタンの実装 -->
   <v-content>
     <v-container width="80%">
       <v-row>
         <v-col>
-          <!-- TODO: ダイアログのコンポーネント化 -->
-          <v-dialog v-model="postDialog" max-width="600px" class="mx-auto">
-            <template v-slot:activator="{ on }">
-              <v-btn v-on="on" class="primary">+ 投稿を新規作成する</v-btn>
-            </template>
-            <v-card>
-              <v-card-title class="grey lighten-5 justify-center">投稿を新規作成する</v-card-title>
-              <v-divider class="mb-6"></v-divider>
-              <v-card-text class="mb-n6">
-                <v-text-field outlined v-model="postContent.title" placeholder="投稿のタイトル"></v-text-field>
-                <v-textarea outlined v-model="postContent.content" placeholder="投稿したい内容を入力して下さい"></v-textarea>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="postDialog=!postDialog">閉じる</v-btn>
-                <v-btn color="blue darken-1" text @click="postDialog=!postDialog; sendMsg()">投稿する</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-          <!-- ダイアログEND -->
+          <v-btn class="primary" @click="$refs.postDialog.open()">+ 投稿を新規作成する</v-btn>
+          <PostDialog @send="sendMsg" ref="postDialog"></PostDialog>
         </v-col>
       </v-row>
-      <v-form></v-form>
+      <!-- TODO: 各投稿の高さを固定して「続きを読む」追加 -->
       <v-card v-for="msg in messages" :key="msg.name" class="mb-2" outlined>
         <v-card-title>{{ msg.fields.title.stringValue}}</v-card-title>
         <v-divider></v-divider>
@@ -43,18 +25,14 @@
 </template>
 <script>
 import axios from "axios";
+import PostDialog from "@/components/parts/PostDialog";
 export default {
   data() {
     return {
-      msg: "",
-      postContent: {
-        title: "",
-        content: ""
-      },
-      messages: [],
-      postDialog: false
+      messages: []
     };
   },
+  components: { PostDialog },
   created() {
     this.getMsgList();
   },
@@ -65,6 +43,7 @@ export default {
       axios
         .get(url)
         .then(response => {
+          // TODO: 投稿日をsplitして配列に格納（.mapかな）
           this.messages = this.sortMsgByPostedTimeDesc(response.data.documents);
           console.log(this.messages);
         })
@@ -72,27 +51,25 @@ export default {
           console.log(error);
         });
     },
-    sendMsg() {
+    sendMsg(postContent) {
       const url =
         "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/postContents";
       const data = {
         fields: {
-          title: { stringValue: this.postContent.title },
-          content: { stringValue: this.postContent.content }
+          title: { stringValue: postContent.title },
+          content: { stringValue: postContent.content }
         }
       };
       axios
         .post(url, data)
         .then(response => {
           console.log(response);
+          // TODO: async-awaitの式変更する
           this.getMsgList();
         })
         .catch(error => {
           console.log(error);
         });
-      this.msg = "";
-      // TODO 投稿成功時に最新のリストを取得（Promise使うべきかも）
-      // this.getMsgList();
     },
     sortMsgByPostedTimeDesc(receivedMsgs) {
       return receivedMsgs.sort((a, b) => {
