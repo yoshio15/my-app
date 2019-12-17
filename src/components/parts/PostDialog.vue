@@ -4,13 +4,26 @@
       <v-card-title class="grey lighten-5 justify-center">投稿を新規作成する</v-card-title>
       <v-divider class="mb-6"></v-divider>
       <v-card-text class="mb-n6">
-        <v-text-field outlined v-model="postContent.title" placeholder="投稿のタイトル"></v-text-field>
-        <v-textarea outlined v-model="postContent.content" placeholder="投稿したい内容を入力して下さい"></v-textarea>
+        <v-form ref="post">
+          <v-text-field
+            outlined
+            v-model="postContent.title"
+            :rules="[rules.required]"
+            placeholder="投稿のタイトル"
+          ></v-text-field>
+          <v-textarea
+            outlined
+            v-model="postContent.content"
+            counter="140"
+            :rules="[rules.required, rules.max140]"
+            placeholder="投稿したい内容を入力して下さい"
+          ></v-textarea>
+        </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="close()">閉じる</v-btn>
-        <v-btn color="blue darken-1" text @click="post(); close()">投稿する</v-btn>
+        <v-btn color="blue darken-1" text @click="post()">投稿する</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -23,6 +36,10 @@ export default {
       postContent: {
         title: "",
         content: ""
+      },
+      rules: {
+        required: value => !!value || "入力必須です",
+        max140: value => value.length <= 140 || "140字以内で入力して下さい"
       }
     };
   },
@@ -34,7 +51,10 @@ export default {
       this.postDialog = false;
     },
     post() {
-      this.$emit('send', this.postContent);
+      if (this.$refs.post.validate()) {
+        this.$emit("send", this.postContent);
+        this.close();
+      }
     }
   }
 };

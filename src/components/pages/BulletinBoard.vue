@@ -13,12 +13,10 @@
         <v-card-title>{{ msg.fields.title.stringValue}}</v-card-title>
         <v-divider></v-divider>
         <v-card-text class="text--primary">
-          <div>
-            <div class="mt-2">{{ msg.fields.content.stringValue }}</div>
-          </div>
+          <div class="mt-2">{{ msg.fields.content.stringValue }}</div>
         </v-card-text>
         <v-divider></v-divider>
-        <v-card-text>投稿日時：{{ msg.createTime }}</v-card-text>
+        <v-card-text>投稿日：{{ msg.createTime }}</v-card-text>
       </v-card>
     </v-container>
   </v-content>
@@ -43,9 +41,12 @@ export default {
       axios
         .get(url)
         .then(response => {
-          // TODO: 投稿日をsplitして配列に格納（.mapかな）
-          this.messages = this.sortMsgByPostedTimeDesc(response.data.documents);
-          console.log(this.messages);
+          this.messages = this.sortMsgByPostedTimeDesc(
+            response.data.documents
+          ).map(document => {
+            document.createTime = document.createTime.substring(0, 10);
+            return document;
+          });
         })
         .catch(error => {
           console.log(error);

@@ -8,31 +8,25 @@ const state = {
 }
 const mutations = {
   setUser(state, user) {
-    console.log('setUser')
     state.user = user;
   },
   setIsSignedIn(state, isSignedIn) {
-    console.log('setIsSignIn')
     state.isSignedIn = isSignedIn;
   }
 }
 const actions = {
   doSetUser({ commit }, user) {
-    console.log('doSetUser')
     commit('setUser', user)
   },
   doSetIsSignedIn({ commit }, isSignedIn) {
-    console.log('doSetIsSignedIn')
     commit('setIsSignedIn', isSignedIn)
   }
 }
 const getters = {
   user(state) {
-    console.log('getters')
     return state.user;
   },
   isSignedIn(state) {
-    console.log('getters')
     return state.isSignedIn;
   }
 }
