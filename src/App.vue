@@ -33,7 +33,7 @@ export default {
   color: #2c3e50;
 }
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity 1s;
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;

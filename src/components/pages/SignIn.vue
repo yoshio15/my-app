@@ -1,5 +1,6 @@
 <template>
   <div class="mt-12">
+    <!-- ログインバリデーション追加 -->
     <v-card width="50%" class="mx-auto" :loading="isLoading">
       <v-card-title class="grey lighten-5 justify-center">Login</v-card-title>
       <v-divider></v-divider>
@@ -33,7 +34,7 @@ export default {
   methods: {
     // TODO: Firebaseにアクセスする系共通化
     signIn: function() {
-      this.isLoading = true
+      this.isLoading = true;
       firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.password)
@@ -42,7 +43,6 @@ export default {
           this.$store.dispatch("doSetUser", user);
           this.$store.dispatch("doSetIsSignedIn", true);
           this.$router.push({ name: "Top" });
-          this.isLoading = false
         })
         .catch(function(error) {
           var errorCode = error.code;
@@ -51,6 +51,9 @@ export default {
           console.log(errorCode);
           console.log(errorMessage);
           alert("FAILED!");
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     }
   }

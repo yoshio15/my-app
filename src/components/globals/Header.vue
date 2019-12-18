@@ -1,7 +1,7 @@
 <template>
   <!-- ※divで囲わないとv-app-barの高さが固定されない -->
   <div>
-    <v-app-bar color="teal" dark>
+    <v-app-bar color="teal" clipped-left dark app>
       <v-app-bar-nav-icon @click="toggleSideBar"  v-if="isSignedIn"></v-app-bar-nav-icon>
       <v-toolbar-title>Yoshio App</v-toolbar-title>
       <v-spacer></v-spacer>

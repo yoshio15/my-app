@@ -1,6 +1,5 @@
 <template>
-  <!-- TODO: フルスクリーンでサイドバーが出てしまうのをなんとかする -->
-  <v-navigation-drawer v-model="drawer" v-if="$store.getters.isSignedIn" app>
+  <v-navigation-drawer v-model="drawer" v-if="$store.getters.isSignedIn" clipped app>
     <v-list>
       <v-subheader>Menu</v-subheader>
       <v-list-item-group>
