@@ -6,7 +6,6 @@
         <PostDialog @send="sendMsg" ref="postDialog"></PostDialog>
       </v-col>
     </v-row>
-    <!-- TODO: 各投稿の高さを固定して「続きを読む」追加 -->
     <v-card v-for="msg in messages" :key="msg.name" class="mb-2" outlined>
       <v-card-title>{{ msg.fields.title.stringValue}}</v-card-title>
       <v-divider></v-divider>
@@ -16,17 +15,17 @@
       <v-divider></v-divider>
       <v-card-text class="d-flex justify-space-between">
         <span>投稿日：{{ msg.createTime }}</span>
-        <!-- TODO: 削除ダイアログ実装 -->
-        <v-btn color="grey" small outlined @click="deletePost(msg.name)">
+        <v-btn color="grey" small outlined @click="$refs.deleteDialog.open(msg)">
           <v-icon>mdi-trash-can-outline</v-icon>削除
         </v-btn>
       </v-card-text>
     </v-card>
+    <delete-dialog @del="deletePost" ref="deleteDialog"></delete-dialog>
   </v-container>
 </template>
 <script>
-import axios from "axios";
 import PostDialog from "@/components/parts/PostDialog";
+import DeleteDialog from "@/components/parts/DeleteDialog";
 import BulletinBoardService from "@/service/BulletinBoardService";
 export default {
   data() {
@@ -34,7 +33,7 @@ export default {
       messages: []
     };
   },
-  components: { PostDialog },
+  components: { PostDialog, DeleteDialog },
   created() {
     this.getMsgList();
   },
@@ -42,33 +41,31 @@ export default {
     getMsgList() {
       (async () => {
         const documentsList = await BulletinBoardService().getDocumentList();
-        console.log(documentsList)
         this.messages = this.sortMsgByPostedTimeDesc(documentsList).map(
           document => {
-            documentsList.createTime = document.createTime.substring(0, 10);
+            document.createTime = document.createTime.substring(0, 10);
             return document;
           }
         );
       })();
     },
     sendMsg(postContent) {
-      // TODO: 以下data()プロパティに移動
       const data = {
         fields: {
           title: { stringValue: postContent.title },
           content: { stringValue: postContent.content }
         }
-      }
-      ;(async () => {
+      };
+      (async () => {
         await BulletinBoardService().postDocument(data);
         this.getMsgList();
-      })()
+      })();
     },
     deletePost(name) {
-      ;(async () => {
+      (async () => {
         await BulletinBoardService().deleteDocument(name);
         this.getMsgList();
-      })()
+      })();
     },
     sortMsgByPostedTimeDesc(receivedMsgs) {
       return receivedMsgs.sort((a, b) => {

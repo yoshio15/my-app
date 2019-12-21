@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card width="50%" class="ma-auto">
+    <v-card width="600px" class="ma-auto">
       <v-card-title class="grey lighten-5 justify-center mt-12">User Registration</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mt-5">

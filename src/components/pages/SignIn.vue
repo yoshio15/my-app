@@ -1,7 +1,7 @@
 <template>
   <div class="mt-12">
     <!-- ログインバリデーション追加 -->
-    <v-card width="50%" class="mx-auto" :loading="isLoading">
+    <v-card width="600px" class="mx-auto" :loading="isLoading">
       <v-card-title class="grey lighten-5 justify-center">Login</v-card-title>
       <v-divider></v-divider>
       <v-card-text class="mt-5">
