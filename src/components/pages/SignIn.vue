@@ -56,12 +56,8 @@ export default {
             this.$router.push({ name: "Top" });
           })
           .catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
             console.log(error);
-            console.log(errorCode);
-            console.log(errorMessage);
-            alert("FAILED!");
+            alert("LOGIN FAILED!");
           })
           .finally(() => {
             this.isLoading = false;
