@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO 削除ボタンの実装 -->
   <v-container>
     <v-row>
       <v-col>
@@ -17,6 +16,7 @@
       <v-divider></v-divider>
       <v-card-text class="d-flex justify-space-between">
         <span>投稿日：{{ msg.createTime }}</span>
+        <!-- TODO: 削除ダイアログ実装 -->
         <v-btn color="grey" small outlined @click="deletePost(msg.name)">
           <v-icon>mdi-trash-can-outline</v-icon>削除
         </v-btn>
@@ -27,6 +27,7 @@
 <script>
 import axios from "axios";
 import PostDialog from "@/components/parts/PostDialog";
+import BulletinBoardService from "@/service/BulletinBoardService";
 export default {
   data() {
     return {
@@ -39,55 +40,35 @@ export default {
   },
   methods: {
     getMsgList() {
-      const url =
-        "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/postContents";
-      axios
-        .get(url)
-        .then(response => {
-          this.messages = this.sortMsgByPostedTimeDesc(
-            response.data.documents
-          ).map(document => {
-            console.log(document);
-            document.createTime = document.createTime.substring(0, 10);
+      (async () => {
+        const documentsList = await BulletinBoardService().getDocumentList();
+        console.log(documentsList)
+        this.messages = this.sortMsgByPostedTimeDesc(documentsList).map(
+          document => {
+            documentsList.createTime = document.createTime.substring(0, 10);
             return document;
-          });
-        })
-        .catch(error => {
-          console.log(error);
-        });
+          }
+        );
+      })();
     },
     sendMsg(postContent) {
-      const url =
-        "https://firestore.googleapis.com/v1/projects/yoshio-app/databases/(default)/documents/postContents";
+      // TODO: 以下data()プロパティに移動
       const data = {
         fields: {
           title: { stringValue: postContent.title },
           content: { stringValue: postContent.content }
         }
-      };
-      axios
-        .post(url, data)
-        .then(response => {
-          console.log(response);
-          // TODO: async-awaitの式変更する
-          this.getMsgList();
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      }
+      ;(async () => {
+        await BulletinBoardService().postDocument(data);
+        this.getMsgList();
+      })()
     },
     deletePost(name) {
-      const baseUrl = 'https://firestore.googleapis.com/v1/'
-      console.log(name);
-      axios
-        .delete(baseUrl + name)
-        .then(response => {
-          console.log(response);
-          this.getMsgList();
-        })
-        .catch(error => {
-          console.log(error);
-        });
+      ;(async () => {
+        await BulletinBoardService().deleteDocument(name);
+        this.getMsgList();
+      })()
     },
     sortMsgByPostedTimeDesc(receivedMsgs) {
       return receivedMsgs.sort((a, b) => {
