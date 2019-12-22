@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import firebase from "firebase";
+import auth from "@/utils/auth";
 export default {
   name: "SignIn",
   data() {
@@ -42,26 +42,16 @@ export default {
     };
   },
   methods: {
-    // TODO: Firebaseにアクセスする系共通化
     signIn: function() {
       if (this.$refs.sign_in.validate()) {
-        this.isLoading = true;
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
-          .then(user => {
-            console.log(user);
-            this.$store.dispatch("doSetUser", user);
-            this.$store.dispatch("doSetIsSignedIn", true);
-            this.$router.push({ name: "Top" });
-          })
-          .catch(function(error) {
-            console.log(error);
-            alert("LOGIN FAILED!");
-          })
-          .finally(() => {
-            this.isLoading = false;
-          });
+        (async () => {
+          this.isLoading = true;
+          const user = await auth().signIn(this.email, this.password);
+          this.$store.dispatch("doSetUser", user);
+          this.$store.dispatch("doSetIsSignedIn", true);
+          this.$router.push({ name: "Top" });
+          this.isLoading = false;
+        })();
       }
     }
   }

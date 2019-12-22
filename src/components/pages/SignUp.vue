@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import firebase from "firebase";
+import auth from "@/utils/auth";
 export default {
   name: "SignUp",
   data() {
@@ -34,20 +34,12 @@ export default {
     };
   },
   methods: {
-    // TODO: Firebaseにアクセスする系共通化
     signUp: function() {
       if (this.$refs.sign_up.validate()) {
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(this.email, this.password)
-          .then(response => {
-            console.log(response);
-            alert("SUCCESS!");
-          })
-          .catch(error => {
-            console.log(error);
-            alert("REGISTRATION FAILED!");
-          });
+        (async () => {
+          await auth().signUp(this.email, this.password);
+          alert("SUCCESS!");
+        })();
       }
     }
   }
